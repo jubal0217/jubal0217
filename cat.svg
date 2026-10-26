@@ -1,1 +1,257 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 16" width="540" height="96" shape-rendering="crispEdges">
+  <style>
+    /* ---------- Palette (edit these to recolor) ---------- */
+    .fur    { fill: #f4a259; }
+    .stripe { fill: #c8662f; }
+    .eye    { fill: #2b1d14; }
+    .nose   { fill: #ff8fa3; }
+    .muzzle { fill: #fff1dc; }
+    .zzz    { fill: #8b9bb4; }
+    .ball   { fill: #e5484d; }
+    .shine  { fill: #ffc2c4; }
 
+    /* ---------- Master 16s timeline ----------
+       0–3s     sniff & wander right
+       3–5s     gallop to the ball
+       5–9s     bat the ball around
+       9–13s    nap (breathing + Zzz)
+       13–13.75 wake up, blink
+       13.75–16 run back left            */
+    .actor { animation: path 16s linear infinite; }
+
+    .st {
+      opacity: 0;
+      animation-duration: 16s;
+      animation-iteration-count: infinite;
+      animation-timing-function: step-end;
+    }
+    #st-sniff   { animation-name: v-sniff; }
+    #st-runr    { animation-name: v-runr; }
+    #st-play    { animation-name: v-play; }
+    #st-sleep   { animation-name: v-sleep; }
+    #st-wake1   { animation-name: v-wake1; }
+    #st-wake2   { animation-name: v-wake2; }
+    #st-runl    { animation-name: v-runl; }
+    #ball-rest  { animation-name: v-ballrest; }
+    #ball-hop   { animation-name: v-play; }
+
+    /* ---------- Two-frame loops inside each state ---------- */
+    .fa, .fb { animation-iteration-count: infinite; animation-timing-function: step-end; }
+    .fa { animation-name: fa; }
+    .fb { animation-name: fb; }
+    .walk { animation-duration: .5s; }
+    .run  { animation-duration: .24s; }
+    .paw  { animation-duration: 1s; }   /* must stay 1s: synced with ball hop */
+    .nap  { animation-duration: 2s; }
+
+    .hop { animation: hop 1s step-end infinite; }
+    .z   { animation: z 2s linear infinite; }
+    .z2  { animation-delay: -1s; }
+
+    /* ---------- Keyframes ---------- */
+    @keyframes path {
+      0%               { transform: translate(4px, 3px); }
+      18.75%           { transform: translate(20px, 3px); }
+      31.25%, 85.9375% { transform: translate(58px, 3px); }
+      100%             { transform: translate(4px, 3px); }
+    }
+
+    @keyframes v-sniff    { 0% { opacity: 1; } 18.75%, 100% { opacity: 0; } }
+    @keyframes v-runr     { 0% { opacity: 0; } 18.75% { opacity: 1; } 31.25%, 100% { opacity: 0; } }
+    @keyframes v-play     { 0% { opacity: 0; } 31.25% { opacity: 1; } 56.25%, 100% { opacity: 0; } }
+    @keyframes v-sleep    { 0% { opacity: 0; } 56.25% { opacity: 1; } 81.25%, 100% { opacity: 0; } }
+    @keyframes v-wake1    { 0% { opacity: 0; } 81.25% { opacity: 1; } 83.75%, 100% { opacity: 0; } }
+    @keyframes v-wake2    { 0% { opacity: 0; } 83.75% { opacity: 1; } 85.9375%, 100% { opacity: 0; } }
+    @keyframes v-runl     { 0% { opacity: 0; } 85.9375%, 100% { opacity: 1; } }
+    @keyframes v-ballrest { 0% { opacity: 1; } 31.25% { opacity: 0; } 56.25%, 100% { opacity: 1; } }
+
+    @keyframes fa { 0% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @keyframes fb { 0% { opacity: 0; } 50%, 100% { opacity: 1; } }
+
+    @keyframes hop {
+      0%, 50%   { transform: translate(0, 0); }
+      55%       { transform: translate(1px, -2px); }
+      65%, 78%  { transform: translate(2px, -4px); }
+      88%       { transform: translate(1px, -2px); }
+      95%, 100% { transform: translate(0, 0); }
+    }
+
+    @keyframes z {
+      0%       { opacity: 0; transform: translate(0, 0); }
+      25%, 70% { opacity: 1; }
+      100%     { opacity: 0; transform: translate(2px, -3px); }
+    }
+  </style>
+
+  <defs>
+    <!-- ===== Parts (sprite faces right, 20x12 grid, feet on row 11) ===== -->
+    <g id="head">
+      <g class="fur">
+        <rect x="14" y="0" width="1" height="2"/> <rect x="15" y="1" width="1" height="1"/>
+        <rect x="18" y="0" width="1" height="2"/> <rect x="17" y="1" width="1" height="1"/>
+        <rect x="13" y="2" width="7" height="4"/>
+        <rect x="14" y="6" width="5" height="1"/>
+      </g>
+      <rect class="stripe" x="16" y="2" width="1" height="1"/>
+      <rect class="muzzle" x="15" y="5" width="3" height="1"/>
+      <rect class="nose"   x="16" y="4" width="1" height="1"/>
+    </g>
+    <g id="eyes" class="eye">
+      <rect x="14" y="3" width="1" height="2"/> <rect x="18" y="3" width="1" height="2"/>
+    </g>
+    <g id="shut" class="eye">
+      <rect x="13" y="4" width="2" height="1"/> <rect x="18" y="4" width="2" height="1"/>
+    </g>
+    <g id="face"><use href="#head"/><use href="#eyes"/></g>
+
+    <g id="body">
+      <g class="fur">
+        <rect x="5" y="5" width="9" height="1"/>
+        <rect x="4" y="6" width="11" height="3"/>
+        <rect x="5" y="9" width="9" height="1"/>
+      </g>
+      <g class="stripe">
+        <rect x="7" y="5" width="1" height="2"/> <rect x="10" y="5" width="1" height="2"/>
+      </g>
+    </g>
+
+    <g id="tail-a">
+      <g class="fur"><rect x="3" y="5" width="1" height="2"/><rect x="2" y="2" width="1" height="3"/></g>
+      <rect class="stripe" x="3" y="1" width="1" height="1"/>
+    </g>
+    <g id="tail-b">
+      <g class="fur"><rect x="3" y="5" width="1" height="2"/><rect x="2" y="3" width="1" height="2"/><rect x="1" y="2" width="1" height="1"/></g>
+      <rect class="stripe" x="1" y="1" width="1" height="1"/>
+    </g>
+    <g id="tail-flat">
+      <rect class="fur" x="1" y="6" width="3" height="1"/>
+      <rect class="stripe" x="0" y="5" width="1" height="1"/>
+    </g>
+
+    <g id="legs-a" class="fur">
+      <rect x="5" y="10" width="1" height="1"/>  <rect x="4" y="11" width="1" height="1"/>
+      <rect x="7" y="10" width="1" height="1"/>  <rect x="8" y="11" width="1" height="1"/>
+      <rect x="11" y="10" width="1" height="1"/> <rect x="10" y="11" width="1" height="1"/>
+      <rect x="13" y="10" width="1" height="1"/> <rect x="14" y="11" width="1" height="1"/>
+    </g>
+    <g id="legs-b" class="fur">
+      <rect x="6" y="10" width="2" height="2"/> <rect x="11" y="10" width="2" height="2"/>
+    </g>
+    <g id="legs-stand" class="fur">
+      <rect x="5" y="10" width="1" height="2"/>  <rect x="7" y="10" width="1" height="2"/>
+      <rect x="11" y="10" width="1" height="2"/> <rect x="13" y="10" width="1" height="2"/>
+    </g>
+
+    <!-- ===== Poses ===== -->
+    <g id="sniff-a">
+      <use href="#tail-a"/><use href="#body"/><use href="#legs-a"/>
+      <use href="#face" transform="translate(1 4)"/>
+    </g>
+    <g id="sniff-b">
+      <use href="#tail-b"/><use href="#body"/><use href="#legs-b"/>
+      <use href="#face" transform="translate(1 3)"/>
+    </g>
+
+    <g id="run-a">
+      <use href="#tail-flat"/><use href="#body"/>
+      <g class="fur">
+        <rect x="4" y="10" width="2" height="1"/>  <rect x="2" y="11" width="2" height="1"/>
+        <rect x="13" y="10" width="2" height="1"/> <rect x="15" y="11" width="2" height="1"/>
+      </g>
+      <use href="#face" transform="translate(1 0)"/>
+    </g>
+    <g id="run-b" transform="translate(0 -1)">
+      <use href="#tail-flat"/><use href="#body"/>
+      <g class="fur">
+        <rect x="7" y="10" width="2" height="1"/> <rect x="10" y="10" width="2" height="1"/>
+      </g>
+      <use href="#face" transform="translate(1 1)"/>
+    </g>
+
+    <g id="play-a">
+      <use href="#tail-b" transform="translate(0 1)"/>
+      <use href="#body"   transform="translate(0 1)"/>
+      <g class="fur">
+        <rect x="5" y="11" width="2" height="1"/> <rect x="11" y="11" width="3" height="1"/>
+      </g>
+      <use href="#face" transform="translate(0 2)"/>
+    </g>
+    <g id="play-b">
+      <use href="#tail-a" transform="translate(0 1)"/>
+      <use href="#body"   transform="translate(0 1)"/>
+      <g class="fur">
+        <rect x="5" y="11" width="2" height="1"/> <rect x="11" y="11" width="2" height="1"/>
+        <rect x="15" y="9" width="5" height="1"/>
+      </g>
+      <use href="#face" transform="translate(1 1)"/>
+    </g>
+
+    <g id="sleep-a">
+      <g class="fur">
+        <rect x="5" y="7" width="8" height="1"/>
+        <rect x="4" y="8" width="10" height="4"/>
+      </g>
+      <g class="stripe">
+        <rect x="7" y="7" width="1" height="2"/> <rect x="10" y="7" width="1" height="2"/>
+        <rect x="3" y="10" width="1" height="2"/> <rect x="4" y="11" width="9" height="1"/>
+      </g>
+      <use href="#head" transform="translate(-1 5)"/>
+      <use href="#shut" transform="translate(-1 5)"/>
+    </g>
+    <g id="sleep-b">
+      <use href="#sleep-a"/>
+      <rect class="fur" x="6" y="6" width="6" height="1"/>
+      <rect class="stripe" x="7" y="6" width="1" height="1"/>
+      <rect class="stripe" x="10" y="6" width="1" height="1"/>
+    </g>
+
+    <g id="stand">
+      <use href="#tail-a"/><use href="#body"/><use href="#legs-stand"/><use href="#head"/>
+    </g>
+
+    <g id="z-s" class="zzz">
+      <rect x="0" y="0" width="3" height="1"/> <rect x="1" y="1" width="1" height="1"/>
+      <rect x="0" y="2" width="3" height="1"/>
+    </g>
+    <g id="z-l" class="zzz">
+      <rect x="0" y="0" width="4" height="1"/> <rect x="2" y="1" width="1" height="1"/>
+      <rect x="1" y="2" width="1" height="1"/> <rect x="0" y="3" width="4" height="1"/>
+    </g>
+
+    <g id="ball-px">
+      <g class="ball"><rect x="1" y="0" width="2" height="4"/><rect x="0" y="1" width="4" height="2"/></g>
+      <rect class="shine" x="1" y="1" width="1" height="1"/>
+    </g>
+  </defs>
+
+  <!-- ===== Scene ===== -->
+  <g id="ball-rest" class="st" transform="translate(78 11)"><use href="#ball-px"/></g>
+
+  <g class="actor">
+    <g id="st-sniff" class="st">
+      <use class="fa walk" href="#sniff-a"/><use class="fb walk" href="#sniff-b"/>
+    </g>
+    <g id="st-runr" class="st">
+      <use class="fa run" href="#run-a"/><use class="fb run" href="#run-b"/>
+    </g>
+    <g id="st-play" class="st">
+      <use class="fa paw" href="#play-a"/><use class="fb paw" href="#play-b"/>
+    </g>
+    <g id="st-sleep" class="st">
+      <use class="fa nap" href="#sleep-a"/><use class="fb nap" href="#sleep-b"/>
+      <g transform="translate(19 3)"><use class="z" href="#z-s"/></g>
+      <g transform="translate(22 0)"><use class="z z2" href="#z-l"/></g>
+    </g>
+    <g id="st-wake1" class="st"><use href="#stand"/><use href="#shut"/></g>
+    <g id="st-wake2" class="st"><use href="#stand"/><use href="#eyes"/></g>
+    <g id="st-runl" class="st">
+      <g transform="matrix(-1 0 0 1 20 0)">
+        <use class="fa run" href="#run-a"/><use class="fb run" href="#run-b"/>
+      </g>
+    </g>
+  </g>
+
+  <g id="ball-hop" class="st">
+    <g transform="translate(78 11)"><use class="hop" href="#ball-px"/></g>
+  </g>
+</svg>
