@@ -1,1 +1,1 @@
-<img src="./pixel-cat.gif" width="150" alt="Walking pixel cat">
+<img src="./cat.svg" alt="Animated pixel cat">
