@@ -1,1 +1,1 @@
-<img src="./cat.svg" alt="Animated pixel cat">
+<img src="https://raw.githubusercontent.com/jubal0217/jubal0217/main/cat.svg?v=2" alt="Animated pixel cat">
