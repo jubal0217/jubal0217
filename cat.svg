@@ -11,7 +11,7 @@
     .shine  { fill: #ffc2c4; }
 
     /* ---------- Master 16s timeline ----------
-       0–3s     sniff & wander right
+       0–3s     sniff and wander right
        3–5s     gallop to the ball
        5–9s     bat the ball around
        9–13s    nap (breathing + Zzz)
